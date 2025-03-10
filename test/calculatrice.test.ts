@@ -74,7 +74,7 @@ describe("Calculatrice class", () => {
       expect(calculatrice.getHistory()).toEqual([
         { operation: "2 + 3", result: 5 },
         { operation: "5 - 3", result: 2 },
-        { operation: "2 * 3", result: 6 },
+        { operation: "2 x 3", result: 6 },
       ]);
     });
   });
