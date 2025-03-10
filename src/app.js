@@ -25,8 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         let newExpression = display.value + value;
 
-        const numberCount = (newExpression.match(/-?\d+(\.\d+)?/g) || []).length;
-        const operatorCount = (newExpression.match(/(?<!^)[\+\x\/](?!-)/g) || []).length;
+        const numberCount = (newExpression.match(/-?\d+(\.\d+)?/g) || [])
+          .length;
+        const operatorCount = (
+          newExpression.match(/(?<!^)[\+\x\/](?!-)/g) || []
+        ).length;
 
         if (numberCount <= 2 && operatorCount <= 1) {
           display.value = newExpression;
@@ -62,7 +65,7 @@ function evaluateExpression(expression, calculator) {
       return calculator.multiply(a, b);
     case "/":
       if (b === 0) throw new Error("Division by zero");
-      return calculator.multiply(a, 1/b);
+      return calculator.multiply(a, 1 / b);
     default:
       throw new Error("Unsupported operator");
   }
