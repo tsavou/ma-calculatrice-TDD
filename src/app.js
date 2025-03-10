@@ -20,31 +20,40 @@ document.addEventListener("DOMContentLoaded", () => {
           display.value = evaluateExpression(expression, calculator);
           updateHistory(calculator);
         } catch (error) {
-          display.value = error;
+          display.value = error.message;
         }
       } else {
-        display.value += value;
+        let newExpression = display.value + value;
+
+        const numberCount = (newExpression.match(/-?\d+(\.\d+)?/g) || []).length;
+        const operatorCount = (newExpression.match(/(?<!^)[\+\x\/](?!-)/g) || []).length;
+
+        if (numberCount <= 2 && operatorCount <= 1) {
+          display.value = newExpression;
+        }
       }
     });
   });
 });
 
 function evaluateExpression(expression, calculator) {
-  const operators = ["+", "-", "x", "/"];
-  let operator = null;
-  for (const op of operators) {
-    if (expression.includes(op)) {
-      operator = op;
-      break;
-    }
+  if (expression.includes("--")) {
+    expression = expression.replace("--", "+");
   }
 
-  if (!operator) {
+  const regex = /^(-?\d+(\.\d+)?)\s*([\+\-x\/])\s*(-?\d+(\.\d+)?)$/;
+
+  const match = expression.match(regex);
+
+  if (!match) {
     throw new Error("Invalid expression");
   }
 
-  const [a, b] = expression.split(operator).map(Number);
-  switch (operator) {
+  const [, num1, , op, num2] = match;
+  const a = parseFloat(num1);
+  const b = parseFloat(num2);
+
+  switch (op) {
     case "+":
       return calculator.add(a, b);
     case "-":
@@ -52,7 +61,8 @@ function evaluateExpression(expression, calculator) {
     case "x":
       return calculator.multiply(a, b);
     case "/":
-      return calculator.multiply(a, 1 / b);
+      if (b === 0) throw new Error("Division by zero");
+      return calculator.multiply(a, 1/b);
     default:
       throw new Error("Unsupported operator");
   }
