@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const numberCount = (newExpression.match(/-?\d+(\.\d+)?/g) || [])
           .length;
         const operatorCount = (
-          newExpression.match(/(?<!^)[\+\x\/](?!-)/g) || []
+          newExpression.match(/(?<!^)[+x/](?!-)/g) || []
         ).length;
 
         if (numberCount <= 2 && operatorCount <= 1) {
@@ -44,7 +44,7 @@ function evaluateExpression(expression, calculator) {
     expression = expression.replace("--", "+");
   }
 
-  const regex = /^(-?\d+(\.\d+)?)\s*([\+\-x\/])\s*(-?\d+(\.\d+)?)$/;
+  const regex = /^(-?\d+(\.\d+)?)\s*([+-x/])\s*(-?\d+(\.\d+)?)$/;
 
   const match = expression.match(regex);
 
